@@ -24,6 +24,7 @@ services:
             define('FORCE_SSL_ADMIN', true);
         }
     volumes:
-      # 將本地開發的 wp-content 映射進容器
-      - ./wp-content:/var/www/html/wp-content
+      # 【關鍵修正】將掛載點改到 /usr/src/wordpress/wp-content
+      # 這樣官方腳本啟動時，會把核心檔案跟你的 wp-content 一起搬去 /var/www/html
+      - ./wp-content:/usr/src/wordpress/wp-content
     restart: always
