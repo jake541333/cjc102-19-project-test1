@@ -6,6 +6,7 @@ RUN apt-get update && apt-get install -y nginx supervisor && rm -rf /var/lib/apt
 # 複製設定檔
 COPY nginx.conf /etc/nginx/nginx.conf
 RUN rm -f /etc/nginx/sites-enabled/default
+COPY www.conf /usr/local/etc/php-fpm.d/zz-docker.conf
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # 設定目錄權限（確保掛載後的檔案 PHP 讀得到）
@@ -16,5 +17,5 @@ RUN chown -R www-data:www-data /var/www/html && \
     chmod +x /usr/local/bin/docker-entrypoint.sh
 
 EXPOSE 80
-ENTRYPOINT []
+ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["/bin/sh", "-c", "/usr/local/bin/docker-entrypoint.sh php-fpm --version && /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf"]
